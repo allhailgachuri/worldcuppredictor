@@ -1,0 +1,54 @@
+# World Cup Match Outcome Predictor - Project Overview & Instructions
+
+This project is an end-to-end machine learning pipeline and web application that predicts the outcome of international football (soccer) matches. It uses historical match data to compute team strengths and serves predictions via an API.
+
+## Core Components
+1. **Machine Learning Pipeline**: Computes Elo ratings (overall team strength adjusted by margin of victory) and Recent Form (average points in the last 5 matches) from historical data. It trains a calibrated logistic regression classifier to predict match outcomes based on these features.
+2. **FastAPI Backend**: A web service that exposes the trained model via an API (e.g., a `/predict` endpoint).
+3. **Frontend**: A user interface (to be built) that allows users to select two teams and see the predicted probabilities.
+
+## Step-by-Step Instructions
+
+Here is what you need to do to get the project running, step-by-step:
+
+### Phase 0: Environment Setup
+1. Open this folder in an IDE like **PyCharm**.
+2. Create a Python virtual environment and activate it.
+3. Install the required dependencies by running:
+   `pip install -r requirements.txt`
+4. Copy the `.env.example` file to `.env`. (You can leave the values as-is for now).
+
+### Phase 1: Get the Data
+1. Check `data/README.md` for specific instructions.
+2. Download the historical match data (`results.csv`) from Kaggle.
+3. Place `results.csv` inside the `data/` directory.
+
+### Phase 2: Train the Model
+1. Run the training script:
+   `python -m ml.train`
+2. This script processes the data, computes Elo/form ratings, trains the classifier, and saves the outputs to the `models/` directory (`model.joblib` and `team_states.json`). Check the console for model accuracy metrics.
+
+### Phase 3: Run the API
+1. Start the FastAPI server locally:
+   `uvicorn api.main:app --reload`
+2. Open your browser and navigate to `http://localhost:8000/docs` to test the interactive API documentation. Test the `/teams` and `/predict` endpoints.
+
+### Phase 4: Run Tests
+1. Verify the API works correctly without retraining by running:
+   `pytest`
+
+### Phase 5: Build the Frontend
+Choose one of the following methods to build the frontend:
+- **Fastest (Streamlit)**: Run `streamlit run frontend_quickstart/streamlit_app.py` for a quick, working UI.
+- **Antigravity (AI)**: Ask the AI (me) to build a polished single-page app that calls your API.
+- **Lovable**: Use Lovable with a detailed prompt for a quick, styled frontend.
+
+### Phase 6 (Optional): Supabase Logging
+If you want to log predictions to a database:
+1. Set up a Supabase project and add your credentials to the `.env` file.
+2. Check `extras/supabase_logger.py` for instructions on creating the table and wiring it into `api/main.py`.
+
+### Phase 7: Deployment & Security
+1. **Backend Deploy**: Deploy the FastAPI app to a service like Render.
+2. **Frontend Deploy**: Deploy the frontend using Streamlit Community Cloud or Vercel/Netlify.
+3. **Security**: Ensure your `.env` file is NOT committed to Git. Set `ALLOWED_ORIGINS` in production to your actual frontend URL, and ensure API keys remain secure on the backend.
